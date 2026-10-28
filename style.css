@@ -2079,15 +2079,7 @@ body {
   }
 
   .form-header {
-    margin-bottom: 1.35rem;
-  }
-
-  .form-title {
-    font-size: 1.65rem;
-  }
-
-  .form-desc {
-    font-size: 0.9rem;
+    display: none !important; /* Removed in mobile UI only as requested */
   }
 
   .form-group {
@@ -2141,9 +2133,9 @@ body {
     padding: 0 !important;
   }
 
-  /* End to End Red Button Flush Across Screen */
+  /* End to End Red Button Flush Across Screen (Plain Red, No Gradient) */
   .sticky-apply-btn {
-    background: linear-gradient(135deg, #ef4444 0%, #e11d24 50%, #b91c1c 100%);
+    background: var(--prime-red) !important; /* Plain red as per our theme, NO gradient */
     border: none !important;
     border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
     border-radius: 0 !important;
@@ -2158,7 +2150,7 @@ body {
     font-size: 1.05rem;
     letter-spacing: 0.3px;
     text-decoration: none;
-    box-shadow: 0 -4px 18px rgba(225, 29, 36, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 -4px 18px rgba(225, 29, 36, 0.45);
     cursor: pointer;
     transition: background 0.15s ease;
     width: 100% !important;
@@ -2166,7 +2158,7 @@ body {
   }
 
   .sticky-apply-btn:active {
-    background: linear-gradient(135deg, #f87171 0%, #ef4444 50%, #dc2626 100%);
+    background: var(--prime-red-hover) !important;
   }
 
   .sticky-btn-label {
