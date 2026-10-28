@@ -2086,32 +2086,34 @@ body {
     margin-bottom: 1.1rem;
   }
 
-  /* Safe padding for end-to-end sticky bar */
+  /* Safe padding for medium sticky bar */
   body {
-    padding-bottom: 58px !important;
+    padding-bottom: 74px !important;
   }
 
   .floating-whatsapp-btn {
-    bottom: 66px !important;
+    bottom: 78px !important;
     right: 16px !important;
   }
 
-  /* End-to-End Sticky Button with NO Black Background */
+  /* Floating Medium Sticky Button with NO Black Background */
   .mobile-sticky-dock {
-    display: block;
+    display: flex;
+    justify-content: center;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
     z-index: 9995;
-    padding: 0 !important;
+    padding: 0 16px calc(12px + env(safe-area-inset-bottom, 8px)) 16px !important;
     margin: 0 !important;
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: none !important;
     box-shadow: none !important;
+    pointer-events: none;
     animation: slideUpSticky 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
@@ -2128,36 +2130,38 @@ body {
 
   .sticky-dock-container {
     width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
     padding: 0 !important;
+    pointer-events: auto;
   }
 
-  /* End to End Red Button Flush Across Screen (Plain Red, No Gradient) */
+  /* Medium Rounded Corners Plain Red Button */
   .sticky-apply-btn {
     background: var(--prime-red) !important; /* Plain red as per our theme, NO gradient */
-    border: none !important;
-    border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
-    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.28) !important;
+    border-radius: var(--radius-md) !important; /* Round in corners (14px) */
     color: #ffffff !important;
-    padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px)) 16px;
+    padding: 11px 18px !important; /* Medium padding */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 1.05rem;
-    letter-spacing: 0.3px;
+    font-size: 0.94rem !important; /* Medium font */
+    letter-spacing: 0.25px;
     text-decoration: none;
-    box-shadow: 0 -4px 18px rgba(225, 29, 36, 0.45);
+    box-shadow: 0 6px 20px rgba(225, 29, 36, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, transform 0.15s ease;
     width: 100% !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
+    pointer-events: auto;
   }
 
   .sticky-apply-btn:active {
+    transform: scale(0.98);
     background: var(--prime-red-hover) !important;
   }
 
