@@ -2139,7 +2139,7 @@ body {
   /* Medium Rounded Corners Plain Red Button */
   .sticky-apply-btn {
     background: var(--prime-red) !important; /* Plain red as per our theme, NO gradient */
-    border: 1px solid rgba(255, 255, 255, 0.28) !important;
+    border: none !important;
     border-radius: var(--radius-md) !important; /* Round in corners (14px) */
     color: #ffffff !important;
     padding: 11px 18px !important; /* Medium padding */
@@ -2152,11 +2152,13 @@ body {
     font-size: 0.94rem !important; /* Medium font */
     letter-spacing: 0.25px;
     text-decoration: none;
-    box-shadow: 0 6px 20px rgba(225, 29, 36, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important; /* Clean dark shadow, NO red glow or square underneath */
     cursor: pointer;
     transition: background 0.15s ease, transform 0.15s ease;
     width: 100% !important;
     margin: 0 auto !important;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
     pointer-events: auto;
   }
 
@@ -2169,6 +2171,17 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  /* Prevent any pseudo-elements or artifacts under sticky dock */
+  .mobile-sticky-dock::before,
+  .mobile-sticky-dock::after,
+  .sticky-dock-container::before,
+  .sticky-dock-container::after,
+  .sticky-apply-btn::before,
+  .sticky-apply-btn::after {
+    display: none !important;
+    content: none !important;
   }
 }
 
