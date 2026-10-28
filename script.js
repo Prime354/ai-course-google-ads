@@ -268,16 +268,17 @@ function initMobileStickyTimer() {
 }
 
 /* ==========================================================================
-   8. Mobile Sticky Apply Now Button & Direct Form Scroll + Focus
+   8. Mobile Sticky Apply CTA & All "Apply for Course" Buttons Redirect
    ========================================================================== */
 function initStickyApplyAction() {
   const applyBtn = document.getElementById('sticky-apply-btn');
   const timerTrigger = document.getElementById('sticky-timer-trigger');
+  const courseApplyBtns = document.querySelectorAll('.btn-course-enroll');
 
   function scrollToForm(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const formCard = document.querySelector('.form-card');
-    const formEl = document.getElementById('contact-form') || document.getElementById('contact-form-wrapper');
+    const formEl = document.getElementById('inquiry-form') || document.getElementById('contact-form') || document.getElementById('contact-form-wrapper');
     const nameInput = document.getElementById('full-name');
 
     if (formEl) {
@@ -305,5 +306,6 @@ function initStickyApplyAction() {
 
   if (applyBtn) applyBtn.addEventListener('click', scrollToForm);
   if (timerTrigger) timerTrigger.addEventListener('click', scrollToForm);
+  courseApplyBtns.forEach(btn => btn.addEventListener('click', scrollToForm));
 }
 
