@@ -13,7 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQAccordion();
   initBrochureWhatsAppRedirect();
   initStickyApplyAction();
+  initMobileWhatsAppDirectRedirect();
 });
+
+/* ==========================================================================
+   0. Mobile Native WhatsApp Direct Redirect Helpers
+   ========================================================================== */
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    ('ontouchstart' in window && window.innerWidth <= 1024);
+}
+
+function openWhatsAppDirect(phone, message) {
+  const cleanPhone = (phone || '9033222499').toString().replace(/\D/g, '');
+  const targetPhone = cleanPhone.startsWith('91') && cleanPhone.length === 12 ? cleanPhone : `91${cleanPhone.replace(/^0+/, '')}`;
+  const encodedMsg = encodeURIComponent(message || '');
+
+  if (isMobileDevice()) {
+    // Direct native app URL scheme (whatsapp://send) opens the WhatsApp app immediately on mobile
+    // Bypasses wa.me web landing page, permission dialogs, and WhatsApp Web prompts
+    window.location.href = `whatsapp://send?phone=${targetPhone}&text=${encodedMsg}`;
+  } else {
+    // Desktop: Open WhatsApp Web in a clean tab
+    window.open(`https://web.whatsapp.com/send?phone=${targetPhone}&text=${encodedMsg}`, '_blank', 'noopener,noreferrer');
+  }
+}
 
 /* ==========================================================================
    1. Header Section Navigation & Mobile Toggle
@@ -99,10 +123,23 @@ function initContactForm() {
     const phoneVal = (phoneInput && phoneInput.value.trim()) || '9033222499';
     const locVal = (locInput && locInput.value.trim()) || 'Drive-In Road, Ahmedabad';
 
-    // Update WhatsApp direct connect button link
+    // Update WhatsApp direct connect button link with mobile native direct launch
     if (successWaBtn) {
       const waMsg = `Hello Prime Academy, I (${fullName}) have submitted my inquiry for the AI Course. My contact number is ${phoneVal} from ${locVal}. Please connect with me for admissions guidance.`;
-      successWaBtn.href = `https://wa.me/919033222499?text=${encodeURIComponent(waMsg)}`;
+      if (isMobileDevice()) {
+        successWaBtn.href = `whatsapp://send?phone=919033222499&text=${encodeURIComponent(waMsg)}`;
+        successWaBtn.removeAttribute('target');
+      } else {
+        successWaBtn.href = `https://web.whatsapp.com/send?phone=919033222499&text=${encodeURIComponent(waMsg)}`;
+        successWaBtn.target = '_blank';
+      }
+
+      successWaBtn.onclick = (e) => {
+        if (isMobileDevice()) {
+          e.preventDefault();
+          openWhatsAppDirect('919033222499', waMsg);
+        }
+      };
     }
 
     // Fast 500ms network submission transition
@@ -141,7 +178,7 @@ function initContactForm() {
 }
 
 /* ==========================================================================
-   3. Dynamic WhatsApp Link Synchronization
+   3. Dynamic WhatsApp Link Synchronization & Mobile Native Direct App Launch
    ========================================================================== */
 function initWhatsAppSync() {
   const waBtn = document.getElementById('wa-floating-btn');
@@ -150,12 +187,29 @@ function initWhatsAppSync() {
 
   if (!waBtn) return;
 
-  function updateWALink() {
+  function getWAMessage() {
     const name = (nameInput && nameInput.value.trim()) || 'Dev Patel';
     const loc = (locInput && locInput.value.trim()) || 'Drive-In Road, Ahmedabad';
-    const msg = `Hello Prime Academy, I want to inquire about the AI Course. My name is ${name} from ${loc}.`;
-    waBtn.href = `https://wa.me/919033222499?text=${encodeURIComponent(msg)}`;
+    return `Hello Prime Academy, I want to inquire about the AI Course. My name is ${name} from ${loc}.`;
   }
+
+  function updateWALink() {
+    const msg = getWAMessage();
+    if (isMobileDevice()) {
+      waBtn.href = `whatsapp://send?phone=919033222499&text=${encodeURIComponent(msg)}`;
+      waBtn.removeAttribute('target');
+    } else {
+      waBtn.href = `https://web.whatsapp.com/send?phone=919033222499&text=${encodeURIComponent(msg)}`;
+      waBtn.target = '_blank';
+    }
+  }
+
+  waBtn.addEventListener('click', (e) => {
+    if (isMobileDevice()) {
+      e.preventDefault();
+      openWhatsAppDirect('919033222499', getWAMessage());
+    }
+  });
 
   if (nameInput) nameInput.addEventListener('input', updateWALink);
   if (locInput) locInput.addEventListener('input', updateWALink);
@@ -195,11 +249,21 @@ function initFAQAccordion() {
 function initBrochureWhatsAppRedirect() {
   const brochureLinks = document.querySelectorAll('.btn-download-brochure');
   brochureLinks.forEach(link => {
+    if (isMobileDevice()) {
+      link.removeAttribute('target');
+    }
+
     link.addEventListener('click', (e) => {
       const course = link.getAttribute('data-course') || 'AI Course';
       const msg = `Hello Prime Academy, please send me the ${course} brochure and syllabus on WhatsApp.`;
-      const waUrl = `https://wa.me/919033222499?text=${encodeURIComponent(msg)}`;
-      link.setAttribute('href', waUrl);
+      
+      if (isMobileDevice()) {
+        e.preventDefault();
+        openWhatsAppDirect('919033222499', msg);
+      } else {
+        const waUrl = `https://web.whatsapp.com/send?phone=919033222499&text=${encodeURIComponent(msg)}`;
+        link.setAttribute('href', waUrl);
+      }
     });
   });
 }
@@ -242,5 +306,31 @@ function initStickyApplyAction() {
 
   if (applyBtn) applyBtn.addEventListener('click', scrollToForm);
   courseApplyBtns.forEach(btn => btn.addEventListener('click', scrollToForm));
+}
+
+/* ==========================================================================
+   8. Global Mobile WhatsApp Native Direct App Delegator
+   ========================================================================== */
+function initMobileWhatsAppDirectRedirect() {
+  // Capture any WhatsApp link click on mobile devices across the entire page
+  // and route directly to native WhatsApp app (whatsapp://send)
+  document.addEventListener('click', (e) => {
+    const waLink = e.target.closest('a[href*="wa.me"], a[href*="whatsapp.com"], a[href*="whatsapp://"]');
+    if (!waLink) return;
+
+    if (isMobileDevice()) {
+      e.preventDefault();
+      const href = waLink.getAttribute('href') || '';
+      let msg = '';
+      try {
+        const urlObj = new URL(href, window.location.origin);
+        msg = urlObj.searchParams.get('text') || '';
+      } catch (err) {
+        const match = href.match(/[?&]text=([^&]+)/);
+        if (match) msg = decodeURIComponent(match[1]);
+      }
+      openWhatsAppDirect('919033222499', msg);
+    }
+  }, { capture: true });
 }
 
