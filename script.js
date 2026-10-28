@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initHighEnd3DParallax();
   initFAQAccordion();
   initBrochureWhatsAppRedirect();
-  initMobileStickyTimer();
   initStickyApplyAction();
 });
 
@@ -206,73 +205,10 @@ function initBrochureWhatsAppRedirect() {
 }
 
 /* ==========================================================================
-   7. Mobile Sticky Workshop Countdown Timer
-   - Persists a realistic rolling target (starts around 2d 12h 27m)
-   - Real-time second-by-second updates with zero-padded digits
-   ========================================================================== */
-function initMobileStickyTimer() {
-  const daysEl = document.getElementById('timer-days');
-  const hoursEl = document.getElementById('timer-hours');
-  const minsEl = document.getElementById('timer-minutes');
-  const secsEl = document.getElementById('timer-seconds');
-
-  if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
-
-  const STORAGE_KEY = 'prime_workshop_timer_target_v1';
-  const DURATION_MS = (2 * 24 * 60 * 60 + 12 * 60 * 60 + 27 * 60 + 28) * 1000; // 2d 12h 27m 28s
-
-  let targetTime;
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    targetTime = saved ? parseInt(saved, 10) : 0;
-  } catch (e) {
-    targetTime = 0;
-  }
-
-  // If not set or expired in the past, re-anchor deadline
-  const now = Date.now();
-  if (!targetTime || targetTime <= now) {
-    targetTime = now + DURATION_MS;
-    try {
-      localStorage.setItem(STORAGE_KEY, targetTime.toString());
-    } catch (e) {}
-  }
-
-  function updateTimer() {
-    const current = Date.now();
-    let diff = targetTime - current;
-
-    if (diff <= 0) {
-      // Auto renew rolling deadline so urgency never drops to zero
-      targetTime = current + (2 * 24 * 60 * 60 * 1000);
-      try {
-        localStorage.setItem(STORAGE_KEY, targetTime.toString());
-      } catch (e) {}
-      diff = targetTime - current;
-    }
-
-    const totalSecs = Math.floor(diff / 1000);
-    const days = Math.floor(totalSecs / 86400);
-    const hours = Math.floor((totalSecs % 86400) / 3600);
-    const minutes = Math.floor((totalSecs % 3600) / 60);
-    const seconds = totalSecs % 60;
-
-    daysEl.textContent = String(days).padStart(2, '0');
-    hoursEl.textContent = String(hours).padStart(2, '0');
-    minsEl.textContent = String(minutes).padStart(2, '0');
-    secsEl.textContent = String(seconds).padStart(2, '0');
-  }
-
-  updateTimer();
-  setInterval(updateTimer, 1000);
-}
-
-/* ==========================================================================
-   8. Mobile Sticky Apply CTA & All "Apply for Course" Buttons Redirect
+   7. Mobile Sticky Apply CTA & All "Apply for Course" Buttons Redirect
    ========================================================================== */
 function initStickyApplyAction() {
   const applyBtn = document.getElementById('sticky-apply-btn');
-  const timerTrigger = document.getElementById('sticky-timer-trigger');
   const courseApplyBtns = document.querySelectorAll('.btn-course-enroll');
 
   function scrollToForm(e) {
@@ -305,7 +241,6 @@ function initStickyApplyAction() {
   }
 
   if (applyBtn) applyBtn.addEventListener('click', scrollToForm);
-  if (timerTrigger) timerTrigger.addEventListener('click', scrollToForm);
   courseApplyBtns.forEach(btn => btn.addEventListener('click', scrollToForm));
 }
 

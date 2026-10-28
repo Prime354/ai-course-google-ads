@@ -1998,23 +1998,113 @@ body {
 }
 
 /* ==========================================================================
-   MOBILE FIXED STICKY DOCK (WORKSHOP COUNTDOWN & APPLY NOW CTA)
-   Matches high-converting mobile workshop bar (Dark forest green card + countdown + pill CTA)
+   MOBILE FIXED STICKY DOCK (JUST RED BOX & TEXT)
    ========================================================================== */
 .mobile-sticky-dock {
   display: none;
 }
 
 @media (max-width: 768px) {
+  /* Merge Hero Content & Inquiry Form into Single Continuous Column on Mobile */
+  .main-wrapper {
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .contact-layout {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    background: var(--gradient-card);
+    border: 1.5px solid var(--border-card);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .contact-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--prime-red) 0%, #ffffff 100%);
+    z-index: 2;
+  }
+
+  .contact-info-card {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 1.85rem 1.35rem 1.25rem 1.35rem !important;
+  }
+
+  .contact-info-card::before {
+    display: none !important;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+    line-height: 1.22;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-channels {
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .channel-card {
+    padding: 0.85rem 1rem;
+  }
+
+  .form-card {
+    background: transparent !important;
+    border: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 1.5rem 1.35rem 1.85rem 1.35rem !important;
+  }
+
+  .form-card::before {
+    display: none !important;
+  }
+
+  .form-header {
+    margin-bottom: 1.35rem;
+  }
+
+  .form-title {
+    font-size: 1.65rem;
+  }
+
+  .form-desc {
+    font-size: 0.9rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.1rem;
+  }
+
+  /* Safe padding for compact sticky bar */
   body {
-    padding-bottom: 160px !important;
+    padding-bottom: 78px !important;
   }
 
   .floating-whatsapp-btn {
-    bottom: 158px !important;
+    bottom: 82px !important;
     right: 16px !important;
   }
 
+  /* Minimal Red Box Sticky Dock */
   .mobile-sticky-dock {
     display: block;
     position: fixed;
@@ -2023,13 +2113,13 @@ body {
     right: 0;
     width: 100%;
     z-index: 9995;
-    padding: 7px 12px calc(8px + env(safe-area-inset-bottom, 8px)) 12px;
-    background: rgba(10, 14, 22, 0.94);
+    padding: 9px 14px calc(9px + env(safe-area-inset-bottom, 8px)) 14px;
+    background: rgba(10, 14, 22, 0.95);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-top: 1px solid rgba(225, 29, 36, 0.42);
-    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.7);
-    animation: slideUpSticky 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border-top: 1.5px solid rgba(225, 29, 36, 0.45);
+    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.65);
+    animation: slideUpSticky 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes slideUpSticky {
@@ -2046,137 +2136,28 @@ body {
   .sticky-dock-container {
     max-width: 440px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
   }
 
-  /* Countdown Red Accent Onyx Box Card */
-  .sticky-timer-card {
-    background: linear-gradient(180deg, #1c0a0c 0%, #0d0405 100%);
-    border: 1px solid rgba(225, 29, 36, 0.45);
-    border-radius: 12px;
-    padding: 6px 10px 7px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 3px 12px rgba(225, 29, 36, 0.2);
-    cursor: pointer;
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
-
-  .sticky-timer-card:active {
-    transform: scale(0.99);
-    border-color: rgba(239, 68, 68, 0.7);
-  }
-
-  .sticky-timer-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 5px;
-  }
-
-  .timer-live-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #ef4444;
-    box-shadow: 0 0 8px #ef4444;
-    animation: timerPulseDot 1.6s ease-in-out infinite;
-  }
-
-  @keyframes timerPulseDot {
-    0%, 100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.35;
-      transform: scale(0.8);
-    }
-  }
-
-  .timer-heading {
-    font-family: var(--font-display);
-    font-size: 0.63rem;
-    font-weight: 800;
-    letter-spacing: 1.6px;
-    color: #ffffff;
-    text-transform: uppercase;
-  }
-
-  .sticky-timer-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-  }
-
-  .timer-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .timer-digit {
-    width: 100%;
-    background: linear-gradient(180deg, #2b3035 0%, #171b1e 52%, #0e1113 100%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 6px;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.28), 0 2px 5px rgba(0, 0, 0, 0.4);
-    font-family: var(--font-mono);
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #ffffff;
-    line-height: 1.35;
-    padding: 3px 0;
-    text-align: center;
-    position: relative;
-    letter-spacing: 0.5px;
-  }
-
-  /* Center flip horizontal line */
-  .timer-digit::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.65);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  .timer-unit-label {
-    font-family: var(--font-display);
-    font-size: 0.55rem;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    color: var(--prime-yellow-bright); /* Brand golden yellow */
-    margin-top: 3px;
-    text-transform: uppercase;
-    text-align: center;
-  }
-
-  /* Apply Now Full Width Pill CTA in Red as per our theme */
+  /* Just Red Box and Text */
   .sticky-apply-btn {
     background: linear-gradient(135deg, #ef4444 0%, #e11d24 50%, #b91c1c 100%);
     border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 9999px;
+    border-radius: var(--radius-md);
     color: #ffffff !important;
-    padding: 11px 18px;
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    text-align: center;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: 0.95rem;
-    letter-spacing: 0.25px;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
     text-decoration: none;
-    box-shadow: 0 6px 25px rgba(225, 29, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 6px 22px rgba(225, 29, 36, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
   }
 
   .sticky-apply-btn:active {
@@ -2184,73 +2165,10 @@ body {
     background: linear-gradient(135deg, #f87171 0%, #ef4444 50%, #dc2626 100%);
   }
 
-  /* Light beam shimmer effect */
-  .sticky-apply-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
-    transform: skewX(-22deg);
-    animation: btnShimmerSweep 3.2s infinite ease-in-out;
-  }
-
-  @keyframes btnShimmerSweep {
-    0% {
-      left: -100%;
-    }
-    40%, 100% {
-      left: 150%;
-    }
-  }
-
-  .sticky-btn-icon-hand {
-    font-size: 1.15rem;
-    line-height: 1;
-    display: inline-block;
-    animation: handNudge 2s infinite ease-in-out;
-  }
-
-  @keyframes handNudge {
-    0%, 100% {
-      transform: translateX(0);
-    }
-    50% {
-      transform: translateX(3px);
-    }
-  }
-
   .sticky-btn-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: 0.2px;
-  }
-
-  .sticky-btn-arrow {
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-  }
-
-  .sticky-apply-btn:hover .sticky-btn-arrow {
-    transform: translateX(3px);
-  }
-}
-
-/* Extra small screens */
-@media (max-width: 380px) {
-  .timer-digit {
-    font-size: 1.02rem;
-  }
-  .sticky-apply-btn {
-    font-size: 0.84rem;
-    padding: 9px 12px;
-    gap: 6px;
-  }
-  .sticky-btn-label {
-    font-size: 0.82rem;
   }
 }
 
